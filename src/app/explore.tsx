@@ -1,23 +1,33 @@
-import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
-import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ExternalLink } from '@/components/external-link';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Collapsible } from '@/components/ui/collapsible';
 import { WebBadge } from '@/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
-export default function TabTwoScreen() {
+const agendaItems = [
+  { time: '09:00', title: 'Revisión semanal', detail: 'Sala 3 · 45 min', tag: 'Reunión', icon: { ios: 'calendar', web: 'event' } },
+  { time: '12:30', title: 'Bloque creativo', detail: 'Trabajo profundo · 90 min', tag: 'En foco', icon: { ios: 'sparkles', web: 'auto_awesome' } },
+  { time: '17:00', title: 'Cierre de día', detail: 'Resumen y siguiente paso', tag: 'Resumen', icon: { ios: 'checkmark.seal', web: 'check_circle' } },
+] as const;
+
+const reminderItems = [
+  { title: 'Enviar confirmación', meta: 'Mañana · 08:00' },
+  { title: 'Actualizar portada', meta: 'Jueves · 13:30' },
+  { title: 'Revisar métricas', meta: 'Viernes · 10:15' },
+] as const;
+
+export default function AgendaScreen() {
   const safeAreaInsets = useSafeAreaInsets();
+  const theme = useTheme();
   const insets = {
     ...safeAreaInsets,
     bottom: safeAreaInsets.bottom + BottomTabInset + Spacing.three,
   };
-  const theme = useTheme();
 
   const contentPlatformStyle = Platform.select({
     android: {
@@ -39,86 +49,70 @@ export default function TabTwoScreen() {
       contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}>
       <ThemedView style={styles.container}>
         <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Explore</ThemedText>
-          <ThemedText style={styles.centerText} themeColor="textSecondary">
-            This starter app includes example{'\n'}code to help you get started.
+          <ThemedText type="small" themeColor="textSecondary">
+            Semana activa
+          </ThemedText>
+          <ThemedText type="title">Agenda</ThemedText>
+          <ThemedText type="small" themeColor="textSecondary" style={styles.centerText}>
+            Mockup con jerarquía clara para revisar citas, tareas y recordatorios sin lógica de negocio.
           </ThemedText>
 
           <ExternalLink href="https://docs.expo.dev" asChild>
-            <Pressable style={({ pressed }) => pressed && styles.pressed}>
+            <Pressable style={({ pressed }) => [styles.linkPressable, pressed && styles.pressed]}>
               <ThemedView type="backgroundElement" style={styles.linkButton}>
-                <ThemedText type="link">Expo documentation</ThemedText>
+                <ThemedText type="link">Referencia Expo</ThemedText>
                 <SymbolView
                   tintColor={theme.text}
                   name={{ ios: 'arrow.up.right.square', android: 'link', web: 'link' }}
-                  size={12}
+                  size={14}
                 />
               </ThemedView>
             </Pressable>
           </ExternalLink>
         </ThemedView>
 
-        <ThemedView style={styles.sectionsWrapper}>
-          <Collapsible title="File-based routing">
-            <ThemedText type="small">
-              This app has two screens: <ThemedText type="code">src/app/index.tsx</ThemedText> and{' '}
-              <ThemedText type="code">src/app/explore.tsx</ThemedText>
-            </ThemedText>
-            <ThemedText type="small">
-              The layout file in <ThemedText type="code">src/app/_layout.tsx</ThemedText> sets up
-              the tab navigator.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/router/introduction">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+        <View style={styles.sectionsWrapper}>
+          {agendaItems.map((item) => (
+            <ThemedView key={item.title} type="backgroundElement" style={styles.eventCard}>
+              <View style={styles.eventHeader}>
+                <View style={styles.eventTimeBadge}>
+                  <ThemedText type="smallBold">{item.time}</ThemedText>
+                </View>
+                <View style={styles.eventTag}>
+                  <ThemedText type="small" themeColor="textSecondary">
+                    {item.tag}
+                  </ThemedText>
+                </View>
+              </View>
 
-          <Collapsible title="Android, iOS, and web support">
-            <ThemedView type="backgroundElement" style={styles.collapsibleContent}>
-              <ThemedText type="small">
-                You can open this project on Android, iOS, and the web. To open the web version,
-                press <ThemedText type="smallBold">w</ThemedText> in the terminal running this
-                project.
-              </ThemedText>
-              <Image
-                source={require('@/assets/images/tutorial-web.png')}
-                style={styles.imageTutorial}
-              />
+              <View style={styles.eventBody}>
+                <View style={styles.eventIconWrap}>
+                  <SymbolView name={item.icon} tintColor={theme.text} size={18} />
+                </View>
+                <View style={styles.eventTextWrap}>
+                  <ThemedText type="smallBold">{item.title}</ThemedText>
+                  <ThemedText type="small" themeColor="textSecondary">
+                    {item.detail}
+                  </ThemedText>
+                </View>
+              </View>
             </ThemedView>
-          </Collapsible>
+          ))}
 
-          <Collapsible title="Images">
-            <ThemedText type="small">
-              For static images, you can use the <ThemedText type="code">@2x</ThemedText> and{' '}
-              <ThemedText type="code">@3x</ThemedText> suffixes to provide files for different
-              screen densities.
-            </ThemedText>
-            <Image source={require('@/assets/images/react-logo.png')} style={styles.imageReact} />
-            <ExternalLink href="https://reactnative.dev/docs/images">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
-
-          <Collapsible title="Light and dark mode components">
-            <ThemedText type="small">
-              This template has light and dark mode support. The{' '}
-              <ThemedText type="code">useColorScheme()</ThemedText> hook lets you inspect what the
-              user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
-
-          <Collapsible title="Animations">
-            <ThemedText type="small">
-              This template includes an example of an animated component. The{' '}
-              <ThemedText type="code">src/components/ui/collapsible.tsx</ThemedText> component uses
-              the powerful <ThemedText type="code">react-native-reanimated</ThemedText> library to
-              animate opening this hint.
-            </ThemedText>
-          </Collapsible>
-        </ThemedView>
+          <ThemedView type="backgroundElement" style={styles.reminderCard}>
+            <ThemedText type="smallBold">Recordatorios</ThemedText>
+            {reminderItems.map((item, index) => (
+              <View key={item.title} style={[styles.reminderRow, index !== reminderItems.length - 1 && styles.reminderDivider]}>
+                <ThemedText type="smallBold" themeColor="textSecondary">
+                  {item.title}
+                </ThemedText>
+                <ThemedText type="small" themeColor="textSecondary">
+                  {item.meta}
+                </ThemedText>
+              </View>
+            ))}
+          </ThemedView>
+        </View>
         {Platform.OS === 'web' && <WebBadge />}
       </ThemedView>
     </ScrollView>
@@ -136,6 +130,7 @@ const styles = StyleSheet.create({
   container: {
     maxWidth: MaxContentWidth,
     flexGrow: 1,
+    width: '100%',
   },
   titleContainer: {
     gap: Spacing.three,
@@ -146,35 +141,79 @@ const styles = StyleSheet.create({
   centerText: {
     textAlign: 'center',
   },
+  linkPressable: {
+    minHeight: 44,
+  },
   pressed: {
-    opacity: 0.7,
+    opacity: 0.72,
   },
   linkButton: {
     flexDirection: 'row',
     paddingHorizontal: Spacing.four,
+    minHeight: 44,
     paddingVertical: Spacing.two,
-    borderRadius: Spacing.five,
+    borderRadius: 22,
     justifyContent: 'center',
     gap: Spacing.one,
     alignItems: 'center',
   },
   sectionsWrapper: {
-    gap: Spacing.five,
+    gap: Spacing.three,
     paddingHorizontal: Spacing.four,
     paddingTop: Spacing.three,
   },
-  collapsibleContent: {
+  eventCard: {
+    borderRadius: 28,
+    padding: Spacing.three,
+    gap: Spacing.three,
+  },
+  eventHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  imageTutorial: {
-    width: '100%',
-    aspectRatio: 296 / 171,
-    borderRadius: Spacing.three,
-    marginTop: Spacing.two,
+  eventTimeBadge: {
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.three,
+    borderRadius: 22,
+    backgroundColor: 'rgba(120,120,128,0.12)',
   },
-  imageReact: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
+  eventTag: {
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.three,
+    borderRadius: 22,
+  },
+  eventBody: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+  },
+  eventIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(120,120,128,0.16)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  eventTextWrap: {
+    flex: 1,
+    gap: 2,
+  },
+  reminderCard: {
+    borderRadius: 28,
+    padding: Spacing.three,
+    gap: Spacing.two,
+  },
+  reminderRow: {
+    minHeight: 44,
+    justifyContent: 'center',
+    gap: 2,
+  },
+  reminderDivider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: 'rgba(128,128,128,0.2)',
   },
 });

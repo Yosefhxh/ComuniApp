@@ -11,20 +11,25 @@ export default function AppTabs() {
     <NativeTabs
       backgroundColor={colors.background}
       indicatorColor={colors.backgroundElement}
-      labelStyle={{ selected: { color: colors.text } }}>
+      labelStyle={{ selected: { color: colors.text, fontWeight: '600' } }}>
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Inicio</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/home.png')}
-          renderingMode="template"
+          sf={{ default: 'house', selected: 'house.fill' }}
+          md="home"
         />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="explore">
-        <NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Agenda</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf={{ default: 'calendar', selected: 'calendar.badge.clock' }} md="event" />
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="profile">
+        <NativeTabs.Trigger.Label>Perfil</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
-          renderingMode="template"
+          sf={{ default: 'person.crop.circle', selected: 'person.crop.circle.fill' }}
+          md="account_circle"
         />
       </NativeTabs.Trigger>
     </NativeTabs>
