@@ -333,7 +333,6 @@ Utilizada para:
 ---
 
 # Estructura General del Proyecto
-
 ```bash
 ComuniApp/
 ├── assets/                    # Recursos estáticos (imágenes, iconos, splash screen)
@@ -347,21 +346,22 @@ ComuniApp/
 ├── app.json                   # Configuración nativa y empaquetado de Expo
 ├── package.json               # Dependencias, scripts de ejecución (Expo, React Native)
 └── README.md                  # Documentación del proyecto
-Instalación y Uso
+```
+---
+# Instalación y Uso
 Sigue estos pasos para configurar el entorno de desarrollo y ejecutar la aplicación localmente.
-1. Prerrequisitos
+
+### 1. Prerrequisitos
 Es necesario contar con las siguientes herramientas:
 
-Node.js (Versión LTS recomendada).
+* Node.js (Versión LTS recomendada).
+* Git instalado en tu sistema.
+* Expo Go instalado en un dispositivo móvil Android/iOS.
+* Proyecto configurado en Firebase Console (Firestore y Auth habilitados).
 
-Git instalado en tu sistema.
+### 2. Clonación e Instalación
 
-Expo Go instalado en un dispositivo móvil Android/iOS.
-
-Proyecto configurado en Firebase Console (Firestore y Auth habilitados).
-
-2. Clonación e Instalación
-Bash
+```bash
 # Clonar el repositorio
 git clone [https://github.com/tu-usuario/ComuniApp.git](https://github.com/tu-usuario/ComuniApp.git)
 
@@ -370,23 +370,22 @@ cd ComuniApp
 
 # Instalar dependencias
 npm install
-3. Configuración de Entorno
+```
+
+### 3. Configuración de Entorno
 Configura las credenciales de Firebase en tu entorno local. Debes inicializar tu objeto de configuración de Firebase con las siguientes variables generadas desde tu consola de Firebase:
 
-apiKey
+* `apiKey`
+* `authDomain`
+* `projectId`
+* `storageBucket`
+* `messagingSenderId`
+* `appId`
 
-authDomain
-
-projectId
-
-storageBucket
-
-messagingSenderId
-
-appId
-
-4. Despliegue y Ejecución
+### 4. Despliegue y Ejecución
 Inicia el servidor de desarrollo de Expo:
 
-Bash
+```bash
 npx expo start
+```
+---
