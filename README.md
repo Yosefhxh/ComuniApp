@@ -41,6 +41,31 @@ This command will move the starter code to the **app-example** directory and cre
 - If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
 - Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
 
+## Firebase integration
+
+The project now has a Firebase service layer in `src/services/firebase.ts` and a root provider in `src/state/firebase-services-provider.tsx`. UI code should consume those services instead of talking to Firestore directly.
+
+### Initial setup
+
+1. Create a Firebase project and enable Authentication and Firestore.
+2. Copy `.env.example` into a local env file and set the Firebase public config values.
+3. Add Google OAuth client IDs if you want the optional Google sign-in flow.
+4. Deploy `firestore.rules` with the Firebase CLI.
+
+### Entities covered
+
+- `UserProfileRecord`
+- `AgendaEventRecord`
+- `ReminderRecord`
+- `TaskRecord`
+
+Each record is scoped to `users/{uid}`, so the authenticated user only reads and writes their own data.
+
+### Offline behavior
+
+- Web uses Firestore IndexedDB persistence.
+- Native reads and lists keep a last-known cache in `AsyncStorage` and reuse it when the network drops.
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:
